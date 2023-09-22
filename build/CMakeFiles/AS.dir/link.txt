@@ -1,0 +1,2 @@
+/usr/bin/ar qc libAS.a CMakeFiles/AS.dir/src/boneco.cpp.o
+/usr/bin/ranlib libAS.a

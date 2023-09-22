@@ -1,0 +1,2 @@
+/usr/bin/ar qc libASTR.a CMakeFiles/ASTR.dir/src/boneco.cpp.o
+/usr/bin/ranlib libASTR.a

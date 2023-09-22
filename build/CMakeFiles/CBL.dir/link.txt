@@ -1,0 +1,2 @@
+/usr/bin/ar qc libCBL.a CMakeFiles/CBL.dir/src/boneco.cpp.o
+/usr/bin/ranlib libCBL.a
