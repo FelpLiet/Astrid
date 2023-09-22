@@ -1,4 +1,0 @@
-/home/felp-ubuntu/documentos/CG/Astrid/build/CMakeFiles/ASTRL.dir
-/home/felp-ubuntu/documentos/CG/Astrid/build/CMakeFiles/Astrid.dir
-/home/felp-ubuntu/documentos/CG/Astrid/build/CMakeFiles/edit_cache.dir
-/home/felp-ubuntu/documentos/CG/Astrid/build/CMakeFiles/rebuild_cache.dir
