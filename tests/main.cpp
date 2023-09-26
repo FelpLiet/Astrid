@@ -1,39 +1,48 @@
 #include "../include/space.hpp"
 
-int main() {
-    // Inicializa GLFW
-    if (!glfwInit()) {
+// Crie uma nave com posição (400, 300) e tamanho (0.1, 0.1)
+spc::nave ship(400.0f, 300.0f, 0.1f, 0.1f);
+
+// Função de callback para quando um clique do mouse ocorre
+void mouse_callback(GLFWwindow *window, double xpos, double ypos)
+{
+    // Atualiza a rotação da nave com base na posição do mouse
+    ship.updateRotation((float)xpos, (float)ypos);
+}
+
+int main()
+{
+    if (!glfwInit())
+    {
         std::cerr << "Erro ao inicializar o GLFW" << std::endl;
         return -1;
     }
 
-    // Configuração do GLFW
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-
-    // Cria uma janela GLFW
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Pirâmide OpenGL", NULL, NULL);
-    if (!window) {
+    GLFWwindow *window = glfwCreateWindow(1080, 1080, "Desenhar Bolas", nullptr, nullptr);
+    if (!window)
+    {
         std::cerr << "Erro ao criar a janela GLFW" << std::endl;
         glfwTerminate();
         return -1;
     }
 
-    // Torna o contexto da janela atual
     glfwMakeContextCurrent(window);
+    glfwSetCursorPosCallback(window, mouse_callback);
 
     // Inicializa GLEW
-    if (glewInit() != GLEW_OK) {
+    if (glewInit() != GLEW_OK)
+    {
         std::cerr << "Erro ao inicializar o GLEW" << std::endl;
         return -1;
     }
 
     // Loop principal
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(window))
+    {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        // Desenha a pirâmide
-        spc::pyramid();
+        // Ball ball(0.0f, 0.0f, 1.0f);
+        // ball.draw();
+        ship.draw();
 
         glfwSwapBuffers(window);
         glfwPollEvents();

@@ -1,23 +1,29 @@
 #pragma once
 
+#include "asteroides.hpp"
+#include "nave.hpp"
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <vector>
+#include <cmath>
+
 namespace spc{
-class pyramid
+class space
 {
 private:
     /* data */
 public:
-    pyramid(/* args */);
-    ~pyramid();
+    space(/* args */);
+    ~space();
 };
 
-pyramid::pyramid(/* args */)
+space::space(/* args */)
 {
 }
 
-pyramid::~pyramid()
+space::~space()
 {
 }
 
