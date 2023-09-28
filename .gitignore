@@ -36,3 +36,6 @@ build/
 CMakeFiles/
 CMakeCache.txt
 Makefile
+
+# vscode
+.vscode/

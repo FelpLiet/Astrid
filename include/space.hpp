@@ -19,12 +19,6 @@ public:
     ~space();
 };
 
-space::space(/* args */)
-{
-}
 
-space::~space()
-{
-}
 
 }
