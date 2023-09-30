@@ -1,43 +1,60 @@
 #include "../include/space.hpp"
-#include <chrono>
 #include <thread>
-#include <iostream>
 #include <vector>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <iostream>
+#include <chrono>
 
-// Crie uma nave com posição (400, 300) e tamanho (0.1, 0.1)
+double mouseX = 0.0;
+double mouseY = 0.0;
+bool drawPoint = false;
+double shipX = 0.0;
+double shipY = 0.0;
+std::chrono::time_point<std::chrono::steady_clock> pointTimerStart;
+
 spc::nave ship;
-spc::asteroide newBall(20, 20, 10.0f);
 
-// Função de callback para quando um clique do mouse ocorre
-void mouse_callback(GLFWwindow *window, double xpos, double ypos)
+// Função para atualizar o status do ponto
+void updatePointStatus()
 {
-    std::cout << "Mouse: (" << xpos << ", " << ypos << ")" << std::endl;
-    ship.updatePosition(window);
+    auto currentTime = std::chrono::steady_clock::now();
+    if (drawPoint && std::chrono::duration_cast<std::chrono::seconds>(currentTime - pointTimerStart).count() >= 1)
+    {
+        drawPoint = false;
+    }
 }
 
-// Função de callback para quando um clique do mouse ocorre
 void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
 {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
     {
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
-        newBall.set_x(xpos);
-        newBall.set_y(ypos);
-        // Adicione uma nova bola nas coordenadas do clique do mouse
-        std::cout << newBall.get_x() << std::endl;
-        std::cout << newBall.get_y() << std::endl;
-        std::cout << newBall.get_radius() << std::endl;
-        glClear(GL_COLOR_BUFFER_BIT);
+        mouseX = xpos;
+        mouseY = ypos;
+        drawPoint = true;
+        pointTimerStart = std::chrono::steady_clock::now();
     }
 }
 
-void drawScene()
+void drawScene(GLFWwindow *window)
 {
     glClear(GL_COLOR_BUFFER_BIT);
+
+    ship.updatePosition(window);
+
     // Desenha a nave
+    glPushMatrix();
+    glTranslatef(shipX, shipY, 0.0);
+    glRotatef(ship.getRotationAngle(), 0.0f, 0.0f, 1.0f);
     ship.draw();
-    newBall.draw_asteroide();
+    glPopMatrix();
+
+    updatePointStatus();
+
+    // Desenha o disparo
+    ship.disparoPosition(drawPoint, mouseX, mouseY);
 }
 
 int main()
@@ -48,7 +65,7 @@ int main()
         return -1;
     }
 
-    GLFWwindow *window = glfwCreateWindow(1080, 1080, "Desenhar Bolas", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(1080, 1080, "Desenhar Cena", nullptr, nullptr);
     if (!window)
     {
         std::cerr << "Erro ao criar a janela GLFW" << std::endl;
@@ -57,29 +74,23 @@ int main()
     }
 
     glfwMakeContextCurrent(window);
-    glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
 
-    // Inicializa GLEW
     if (glewInit() != GLEW_OK)
     {
         std::cerr << "Erro ao inicializar o GLEW" << std::endl;
         return -1;
     }
 
-    // Configuração da taxa de quadros por segundo
-    // glfwSwapInterval(1000); // Define a taxa de VSync para 1 (60 FPS)
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Cor de fundo preta
 
-    // Loop principal
     while (!glfwWindowShouldClose(window))
     {
-        drawScene();
+        drawScene(window); // Passa a janela como argumento para a função drawScene
         glfwSwapBuffers(window);
         glfwPollEvents();
-        // std::this_thread::sleep_for(std::chrono::milliseconds(1000));  // Espera por aproximadamente 16 ms (60 FPS)
     }
 
-    // Encerra o GLFW
     glfwTerminate();
 
     return 0;
