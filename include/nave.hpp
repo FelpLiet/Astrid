@@ -12,7 +12,7 @@ namespace spc
     class nave
     {
     private:
-        float vertices[9];  
+        float vertices[9];
         float rotationAngle;
         float rotationSpeed;
 
@@ -26,9 +26,9 @@ namespace spc
         // Métodos setters para os atributos privados
         void setRotationAngle(float angle) { rotationAngle = angle; }
         void setRotationSpeed(float speed) { rotationSpeed = speed; }
-        
+
         void draw();
         void updatePosition(GLFWwindow *window);
-   
-};
+        void disparoPosition(double drawPoint, double mouseX, double mouseY);
+    };
 }
