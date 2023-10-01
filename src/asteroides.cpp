@@ -7,10 +7,11 @@ namespace spc
 
     void asteroide::draw_asteroide()
     {
-        //glClear(GL_COLOR_BUFFER_BIT);
+        // glClear(GL_COLOR_BUFFER_BIT);
+        //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         glBegin(GL_POLYGON);
-        glColor3f(1.0f, 0.0f, 0.0f); // Cor vermelha
-        glVertex2d(x, y);            // Centro da bola
+        glColor3f(1.0, 0.0, 0.0); // Cor vermelha
+        glVertex2d(x, y);         // Centro da bola
         int numSegments = 100;
         for (int i = 0; i <= numSegments; ++i)
         {
@@ -21,4 +22,5 @@ namespace spc
         }
         glEnd();
     }
+    
 }
