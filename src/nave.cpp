@@ -47,15 +47,23 @@ namespace spc
         rotationAngle *= rotationSpeed;
     }
 
-    void nave::disparoPosition(double drawPoint, double mouseX, double mouseY){
-        if (drawPoint)
+    void nave::disparoPosition(double drawSquare, double mouseX, double mouseY)
+    {
+        if (drawSquare)
         {
-            glPointSize(50);
-            glBegin(GL_POINTS);
-            glColor3f(1.0f, 0.0f, 0.0f);                                    // Cor vermelha
-            glVertex2d((mouseX - 540.0) / 540.0, (540.0 - mouseY) / 540.0); // Mapeia a posição do ponto para as coordenadas do OpenGL
+            float size = 0.09; 
+            float x = (mouseX - 540.0) / 540.0;
+            float y = (540.0 - mouseY) / 540.0;
+            glColor3f(1.0f, 0.0f, 0.0f); 
+            glBegin(GL_POLYGON);        
+            for (int i = 0; i < 36; i++) 
+            {
+                float angle = 2.0 * M_PI * i / 36.0; 
+                float xOffset = size * cos(angle);
+                float yOffset = size * sin(angle);
+                glVertex2f(x + xOffset, y + yOffset); 
+            }
             glEnd();
-            glPointSize(1.0f);
         }
     }
 }
