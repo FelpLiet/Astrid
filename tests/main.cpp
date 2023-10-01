@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <chrono>
+#include <algorithm>
 
 double mouseX = 0.0;
 double mouseY = 0.0;
@@ -14,6 +15,14 @@ double shipY = 0.0;
 std::chrono::time_point<std::chrono::steady_clock> pointTimerStart;
 
 spc::nave ship;
+
+struct Disparo
+{
+    spc::nave objeto;
+    std::chrono::time_point<std::chrono::steady_clock> timeCreated;
+};
+
+std::vector<Disparo> disparos; // Use uma estrutura que inclui o objeto e o tempo de criação
 
 // Função para atualizar o status do ponto
 void updatePointStatus()
@@ -31,6 +40,12 @@ void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
     {
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
+
+        Disparo disparo;
+        disparo.objeto = spc::nave(xpos, ypos);
+        disparo.timeCreated = std::chrono::steady_clock::now();
+        disparos.push_back(disparo);
+
         mouseX = xpos;
         mouseY = ypos;
         drawPoint = true;
@@ -51,11 +66,25 @@ void drawScene(GLFWwindow *window)
     ship.draw();
     glPopMatrix();
 
-    updatePointStatus();
-
-    // Desenha o disparo
-    ship.disparoPosition(drawPoint, mouseX, mouseY);
+    // Desenha e verifica os disparos
+    auto currentTime = std::chrono::steady_clock::now();
+    for (auto it = disparos.begin(); it != disparos.end();)
+    {
+        if (std::chrono::duration_cast<std::chrono::seconds>(currentTime - it->timeCreated).count() >= 1)
+        {
+            // O disparo está ativo por mais de 1 segundo, remova-o
+            it = disparos.erase(it);
+        }
+        else
+        {
+            // O disparo ainda está ativo, desenhe-o
+            updatePointStatus();
+            it->objeto.disparoPosition(drawPoint, it->objeto.getPosX(), it->objeto.getPosY());
+            ++it;
+        }
+    }
 }
+
 
 int main()
 {
