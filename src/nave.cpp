@@ -13,6 +13,7 @@ namespace spc
     {
         glClear(GL_COLOR_BUFFER_BIT);
         glLoadIdentity();
+        glTranslatef(getX(), getY(), 0.0f);
         glScalef(0.1f, 0.1f, 0.1f);
         glRotatef(getRotationAngle(), 0.0f, 0.0f, 1.0f);
 
