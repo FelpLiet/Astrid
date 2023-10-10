@@ -16,7 +16,7 @@ int initWindow()
     glfwWindowHint(GLFW_SAMPLES, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
     window = glfwCreateWindow(WIDTH, HEIGHT, "ASTRID", nullptr, nullptr);
@@ -54,6 +54,7 @@ void input(GLFWwindow *window)
 
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && keyMap[GLFW_KEY_F].prev)
     {
+        glfwWaitEventsTimeout(0.7);
         if (!fullscreen)
             glfwSetWindowMonitor(window, monitor, 0, 0, WIDTH, HEIGHT, 0);
         if (fullscreen)
@@ -80,17 +81,23 @@ void reshapeWindow(GLFWwindow *window, int width, int height)
 void runAstrid()
 {
     initWindow();
-    double lastTime = 0.0;
+    double lastTime = 0;
+    double deltaTime = 0.0;
+    const double FPS = 60.0;
+    const double targetFrameTime = 1.0 / FPS;
     while (running)
     {
         double currentTime = glfwGetTime();
         double deltaTime = currentTime - lastTime;
-        if (deltaTime >= 1 / 60)
+        lastTime = currentTime;
+        while (deltaTime >= targetFrameTime)
         {
-            lastTime = currentTime;
-            drawScene(window);
+            input(window);
+            update(window);
+            std::cout << "FPS: " << 1.0 / deltaTime << std::endl;
+            deltaTime -= targetFrameTime;
         }
-        input(window);
+        drawScene(window);
     }
     glfwDestroyWindow(window);
     glfwTerminate();

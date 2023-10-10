@@ -22,7 +22,7 @@ add_library(ASTRL STATIC ${ASTRL_SOURCES})
 add_executable(Astrid ${SPACE_SOURCES})
 
 # link glfw3 library and opengl library
-target_link_libraries(ASTRL PUBLIC ${OPENGL_LIBRARIES} glfw GLEW::GLEW glm::glm)
+target_link_libraries(ASTRL PUBLIC ${OPENGL_LIBRARIES} glfw GLEW::GLEW glm)
 
 # link ASTRLLibrary 
 target_link_libraries(Astrid PUBLIC ASTRL)
