@@ -11,7 +11,7 @@ namespace spc
         float radius;
 
     public:
-        asteroide(float x, float y, float radius) : x(x), y(y), radius(radius) {}
+        asteroide(float x, float y) : x(x), y(y) {}
         ~asteroide();
         
         float get_radius() { return radius; }

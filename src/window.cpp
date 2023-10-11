@@ -2,6 +2,7 @@
 
 bool running = true, fullscreen;
 spc::nave ship;
+spc::asteroide asteroide1(0.1, 0.1);
 GLFWwindow *window;
 GLFWmonitor *monitor;
 std::map<int, key> keyMap;
@@ -93,6 +94,7 @@ void drawScene(GLFWwindow *window)
 
     ship.updatePosition(window);
     ship.draw();
+    asteroide1.draw_asteroide();
     glfwSwapBuffers(window);
 }
 
