@@ -1,4 +1,6 @@
 #include "../include/nave.hpp"
+#define STB_IMAGE_IMPLEMENTATION
+#include "../include/stb_image.h"
 
 namespace spc
 {
@@ -18,12 +20,34 @@ namespace spc
 
     void nave::draw()
     {
+
+        int width, height, channels;
+        unsigned char *image = stbi_load("../assets/Nave/Falcon.png", &width, &height, &channels, 0);
+
+        if (image == NULL)
+        {
+            // Handle error
+        }
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+        stbi_image_free(image);
+
+        glClear(GL_COLOR_BUFFER_BIT);
+        glLoadIdentity();
+        //glTranslatef(getX(), getY(), 0.0f);
+        //glScalef(0.1f, 0.1f, 0.1f);
+        glRotatef(getRotationAngle(), 0.0f, 0.0f, 1.0f);
+
+        glEnable(GL_TEXTURE_2D);
         glBegin(GL_TRIANGLES);
-        glColor3f(0.0f, 0.0f, 1.0f); // Cor azul
-        glVertex2f(-0.025f, -0.025f);
-        glVertex2f(0.025f, -0.025f);
-        glVertex2f(0.0f, 0.025f);
+        glTexCoord2f(0.0f, 0.0f);
+        glVertex3f(vertices[0], vertices[1], vertices[2]);
+        glTexCoord2f(1.0f, 0.0f);
+        glVertex3f(vertices[3], vertices[4], vertices[5]);
+        glTexCoord2f(0.5f, 1.0f);
+        glVertex3f(vertices[6], vertices[7], vertices[8]);
         glEnd();
+        glDisable(GL_TEXTURE_2D);
     }
 
     void nave::updatePosition(GLFWwindow *window)
@@ -45,25 +69,5 @@ namespace spc
 
         // Ajusta a velocidade de rotação
         rotationAngle *= rotationSpeed;
-    }
-
-    void nave::disparoPosition(double drawSquare, double mouseX, double mouseY)
-    {
-        if (drawSquare)
-        {
-            float size = 0.09; 
-            float x = (mouseX - 540.0) / 540.0;
-            float y = (540.0 - mouseY) / 540.0;
-            glColor3f(1.0f, 0.0f, 0.0f); 
-            glBegin(GL_POLYGON);        
-            for (int i = 0; i < 36; i++) 
-            {
-                float angle = 2.0 * M_PI * i / 36.0; 
-                float xOffset = size * cos(angle);
-                float yOffset = size * sin(angle);
-                glVertex2f(x + xOffset, y + yOffset); 
-            }
-            glEnd();
-        }
     }
 }
