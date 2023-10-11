@@ -5,6 +5,7 @@ spc::nave ship;
 GLFWwindow *window;
 GLFWmonitor *monitor;
 std::map<int, key> keyMap;
+int WIDTH = 1280, HEIGHT = 720;
 
 int initWindow()
 {
@@ -31,8 +32,7 @@ int initWindow()
     monitor = glfwGetPrimaryMonitor();
     running = true;
     fullscreen = false;
-    glfwSetWindowSizeCallback(window, reshapeWindow);
-
+    //glfwSetWindowSizeCallback(window, reshapeWindow);
     // Inicializa GLEW
     if (glewInit() != GLEW_OK)
     {
@@ -66,16 +66,34 @@ void input(GLFWwindow *window)
 
 void drawScene(GLFWwindow *window)
 {
+    // Set up the viewport
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+    glViewport(0, 0, width, height);
+
+    // Set up the projection matrix
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    float aspectRatio = (float)width / (float)height;
+    float size = 10.0f;
+    if (aspectRatio > 1.0f)
+    {
+        glOrtho(-size * aspectRatio, size * aspectRatio, -size, size, -1.0f, 1.0f);
+    }
+    else
+    {
+        glOrtho(-size, size, -size / aspectRatio, size / aspectRatio, -1.0f, 1.0f);
+    }
+
+    // Switch back to the modelview matrix
+    glMatrixMode(GL_MODELVIEW);
+
+
     glClear(GL_COLOR_BUFFER_BIT);
-    // Desenha a nave
+
     ship.updatePosition(window);
     ship.draw();
     glfwSwapBuffers(window);
-}
-
-void reshapeWindow(GLFWwindow *window, int width, int height)
-{
-    glViewport(0, 0, width, height);
 }
 
 void runAstrid()
