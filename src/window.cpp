@@ -2,11 +2,13 @@
 
 bool running = true, fullscreen;
 spc::nave ship;
-spc::asteroide asteroide1(0.1, 0.1);
+spc::asteroide asteroide1(-50.0, 50.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0);
 GLFWwindow *window;
 GLFWmonitor *monitor;
 std::map<int, key> keyMap;
 int WIDTH = 1280, HEIGHT = 720;
+    double lt = 0;
+    double dt = 0.0;
 
 int initWindow()
 {
@@ -94,7 +96,10 @@ void drawScene(GLFWwindow *window)
 
     ship.updatePosition(window);
     ship.draw();
+    dt = glfwGetTime() - lt /1000.0;
+    asteroide1.calculo_trajetoria(dt, WIDTH);
     asteroide1.draw_asteroide();
+    asteroide1.draw_lines();
     glfwSwapBuffers(window);
 }
 

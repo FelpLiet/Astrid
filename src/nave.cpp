@@ -10,9 +10,11 @@ namespace spc
         vertices[0] = -0.5f;
         vertices[1] = -0.5f;
         vertices[2] = 0.0f;
+
         vertices[3] = 0.5f;
         vertices[4] = -0.5f;
         vertices[5] = 0.0f;
+        
         vertices[6] = 0.0f;
         vertices[7] = 0.5f;
         vertices[8] = 0.0f;
@@ -34,8 +36,8 @@ namespace spc
 
         glClear(GL_COLOR_BUFFER_BIT);
         glLoadIdentity();
-        //glTranslatef(getX(), getY(), 0.0f);
-        //glScalef(0.1f, 0.1f, 0.1f);
+        // glTranslatef(getX(), getY(), 0.0f);
+        // glScalef(0.1f, 0.1f, 0.1f);
         glRotatef(getRotationAngle(), 0.0f, 0.0f, 1.0f);
 
         glEnable(GL_TEXTURE_2D);
