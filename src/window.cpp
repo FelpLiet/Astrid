@@ -72,7 +72,71 @@ void input(GLFWwindow *window)
 
 void drawScene(GLFWwindow *window)
 {
-    // Set up the viewport
+    aspecRatio(window);
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    ship.draw();
+
+    for( auto disparo : disparos)
+    {
+        if (disparo.getDrawPoint())
+        {
+            disparo.draw(window);
+            std::cout<<"x: "<<disparo.getX()<<" y: "<<disparo.getY()<<std::endl;
+        }
+    }
+
+    glfwSwapBuffers(window);
+}
+
+void runAstrid()
+{
+    initWindow();
+    double lastTime = 0;
+    double deltaTime = 0.0;
+    const double FPS = 60.0;
+    const double targetFrameTime = 1.0 / FPS;
+    while (running)
+    {
+        double currentTime = glfwGetTime();
+        double deltaTime = currentTime - lastTime;
+        lastTime = currentTime;
+        while (deltaTime >= targetFrameTime)
+        {
+            input(window);
+            update(window);
+            //std::cout << "FPS: " << 1.0 / deltaTime << std::endl;
+            deltaTime -= targetFrameTime;
+        }
+        drawScene(window);
+    }
+    glfwDestroyWindow(window);
+    glfwTerminate();
+}
+
+void update(GLFWwindow *window)
+{
+    spc::verificaDisparos(disparos);
+    ship.updatePosition(window);
+}
+
+void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
+{
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+    {
+        double xpos, ypos;
+        glfwGetCursorPos(window, &xpos, &ypos);
+
+        spc::disparo newDisparo(xpos, ypos, std::chrono::steady_clock::now());
+        std::cout<<"newdisparo x: "<<newDisparo.getX()<<" y: "<<newDisparo.getY()<<std::endl;
+        disparos.push_back(newDisparo);
+    }
+}
+
+void aspecRatio(GLFWwindow *window)
+{
+     // Set up the viewport
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
     glViewport(0, 0, width, height);
@@ -93,70 +157,4 @@ void drawScene(GLFWwindow *window)
 
     // Switch back to the modelview matrix
     glMatrixMode(GL_MODELVIEW);
-
-
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    ship.updatePosition(window);
-    ship.draw();
-    glfwSwapBuffers(window);
-}
-
-void runAstrid()
-{
-    initWindow();
-    double lastTime = 0;
-    double deltaTime = 0.0;
-    const double FPS = 60.0;
-    const double targetFrameTime = 1.0 / FPS;
-    while (running)
-    {
-        double currentTime = glfwGetTime();
-        double deltaTime = currentTime - lastTime;
-        lastTime = currentTime;
-        while (deltaTime >= targetFrameTime)
-        {
-            input(window);
-            update(window);
-            std::cout << "FPS: " << 1.0 / deltaTime << std::endl;
-            deltaTime -= targetFrameTime;
-        }
-        drawScene(window);
-    }
-    glfwDestroyWindow(window);
-    glfwTerminate();
-}
-
-void update(GLFWwindow *window)
-{
-    // Desenha e verifica os disparos
-    auto currentTime = std::chrono::steady_clock::now();
-    // for (spc::disparo it = disparos.begin(); it != disparos.end();)
-     for (int i = 0; i < disparos.size(); i++)
-    {
-        if (std::chrono::duration_cast<std::chrono::seconds>(currentTime - disparos[i].getTimeCreated()).count() >= 1)
-        {
-            // O disparo está ativo por mais de 1 segundo, remova-o
-            disparos.erase(disparos.begin() + i);
-        }
-        else
-        {
-            // O disparo ainda está ativo, desenhe-o
-            disparos[i].updatePointStatus();
-            disparos[i].disparoPosition(disparos[i].getX(), disparos[i].getY());
-        }
-    }
-}
-
-void mouse_button_callback(GLFWwindow *window , int button, int action, int mods)
-{
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
-    {
-        double xpos, ypos;
-        glfwGetCursorPos(window, &xpos, &ypos);
-
-        spc::disparo newDisparo(xpos, ypos, std::chrono::steady_clock::now());
-        
-        disparos.push_back(newDisparo);
-    }
 }

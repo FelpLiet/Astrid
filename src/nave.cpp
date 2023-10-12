@@ -32,7 +32,9 @@ namespace spc
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
         stbi_image_free(image);
 
+        glPushMatrix();
         glClear(GL_COLOR_BUFFER_BIT);
+        glColor3f(1.0f, 1.0f, 1.0f);
         glLoadIdentity();
         //glTranslatef(getX(), getY(), 0.0f);
         //glScalef(0.1f, 0.1f, 0.1f);
@@ -48,6 +50,7 @@ namespace spc
         glVertex3f(vertices[6], vertices[7], vertices[8]);
         glEnd();
         glDisable(GL_TEXTURE_2D);
+        glPopMatrix();
     }
 
     void nave::updatePosition(GLFWwindow *window)
