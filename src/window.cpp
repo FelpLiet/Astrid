@@ -1,11 +1,11 @@
 #include "../include/window.hpp"
 
 spc::nave ship;
+spc::space space;
 spc::asteroide asteroide1;
 
 GLFWwindow *window;
 GLFWmonitor *monitor;
-
 
 std::vector<spc::disparo> disparos;
 std::map<int, key> keyMap;
@@ -86,12 +86,13 @@ void drawScene(GLFWwindow *window)
         if (disparo.getDrawPoint())
         {
             disparo.draw(window);
-            //std::cout << "x: " << disparo.getX() << " y: " << disparo.getY() << std::endl;
+            // std::cout << "x: " << disparo.getX() << " y: " << disparo.getY() << std::endl;
         }
     }
 
     asteroide1.draw_asteroide();
-    //asteroide1.draw_lines();
+    // asteroide1.draw_lines();
+    space.draw(window);
 
     glfwSwapBuffers(window);
 }
@@ -135,8 +136,19 @@ void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
 
-        spc::disparo newDisparo(xpos, ypos, std::chrono::steady_clock::now());
-        std::cout << "newdisparo x: " << newDisparo.getX() << " y: " << newDisparo.getY() << std::endl;
+        GLdouble modelview[16], projection[16];
+        GLint viewport[4];
+
+        glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
+        glGetDoublev(GL_PROJECTION_MATRIX, projection);
+        glGetIntegerv(GL_VIEWPORT, viewport);
+
+        GLdouble worldX, worldY, worldZ;
+        gluUnProject(xpos, viewport[3] - ypos, 0.0, modelview, projection, viewport, &worldX, &worldY, &worldZ);
+
+        spc::disparo newDisparo(worldX, worldY, std::chrono::steady_clock::now());
+        std::cout << "x: " << worldX << " y: " << worldY << std::endl;
+       // std::cout << "newdisparo x: " << newDisparo.getX() << " y: " << newDisparo.getY() << std::endl;
         disparos.push_back(newDisparo);
     }
 }

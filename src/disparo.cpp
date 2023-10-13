@@ -6,21 +6,21 @@ namespace spc
     {
         int WIDTH, HEIGHT;
         glfwGetWindowSize(window, &WIDTH, &HEIGHT);
-        WIDTH /= 2;
-        HEIGHT /= 2;
+        
         glPushMatrix();
-        glColor3f(1.0f, 0.0f, 0.0f);
-        float size = 0.09;
-        float newX = (x - WIDTH) / WIDTH;
-        float newY = (HEIGHT - y) / HEIGHT;
-        glBegin(GL_POLYGON);
-        for (int i = 0; i < 36; i++)
+        glBegin(GL_TRIANGLE_FAN);
+        glColor3f(1.0f, 0.5f, 0.0f);
+        glVertex2f(x, y);          
+
+        int numSegments = 50;
+        for (int i = 0; i <= numSegments; ++i)
         {
-            float angle = 2.0 * M_PI * i / 36.0;
-            float xOffset = size * cos(angle);
-            float yOffset = size * sin(angle);
-            glVertex2f(newX + xOffset, newY + yOffset);
+            double theta = 2.0 * M_PI * static_cast<double>(i) / static_cast<double>(numSegments);
+            double disX = x+1.0 * std::cos(theta);
+            double disY = y+1.0 * std::sin(theta);
+            glVertex2f(disX, disY);
         }
+
         glEnd();
         glPopMatrix();
     }

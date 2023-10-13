@@ -15,6 +15,7 @@ private:
     /* data */
 public:
     space(/* args */);
+    void draw(GLFWwindow *window);
     ~space();
 };
 

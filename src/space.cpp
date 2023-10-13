@@ -9,4 +9,25 @@ namespace spc
     space::~space()
     {
     }
-} // namespace spc
+
+    void space::draw(GLFWwindow *window)
+    {
+        glPushMatrix();
+        glBegin(GL_TRIANGLE_FAN);
+        glColor3f(0.0f, 0.5f, 1.0f); // Blue color for the Earth
+        glVertex2f(0, -9);           // Center of the Earth
+
+        int numSegments = 50;
+        for (int i = 0; i <= numSegments; ++i)
+        {
+            double theta = 2.0 * M_PI * static_cast<double>(i) / static_cast<double>(numSegments);
+            double terraX = 5.0 * std::cos(theta);
+            double terraY = -9 + 5.0 * std::sin(theta);
+            glVertex2f(terraX, terraY);
+        }
+
+        glEnd();
+        glPopMatrix();
+    }
+
+}
