@@ -1,9 +1,9 @@
 #pragma once
 
-#include "asteroides.hpp"
 #include "disparo.hpp"
 #include "nave.hpp"
 #include "space.hpp"
+#include "asteroides.hpp"
 #include <map>
 #include <chrono>
 

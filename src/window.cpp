@@ -12,8 +12,6 @@ std::map<int, key> keyMap;
 
 bool running = true, fullscreen;
 int WIDTH = 1280, HEIGHT = 720;
-double lt = 0;
-double dt = 0.0;
 
 int initWindow()
 {
@@ -92,8 +90,6 @@ void drawScene(GLFWwindow *window)
         }
     }
 
-    dt = glfwGetTime() - lt / 1000.0;
-    asteroide1.calculo_trajetoria(dt, WIDTH);
     asteroide1.draw_asteroide();
     asteroide1.draw_lines();
 
@@ -127,6 +123,7 @@ void runAstrid()
 
 void update(GLFWwindow *window)
 {
+    asteroide1.calculo_trajetoria(window);
     spc::verificaDisparos(disparos);
     ship.updatePosition(window);
 }

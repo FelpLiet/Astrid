@@ -61,8 +61,16 @@ namespace spc
         glEnd();
         glPopMatrix();
     }
-    void asteroide::calculo_trajetoria(float dt, int width)
+    
+    void asteroide::calculo_trajetoria(GLFWwindow *window)
     {
+        int timeNow = glfwGetTime();
+        float dt = (float)(timeNow - timeLastFrame) / 1000.0f;
+        timeLastFrame = timeNow;
+
+        int width, height;
+        glfwGetWindowSize(window, &width, &height);
+        
         direcaoX = pontoFinalX - pontoInicialX;
         direcaoY = pontoFinalY - pontoInicialY;
 
@@ -91,13 +99,12 @@ namespace spc
             if (pontoInicialX < 0)
             {
                 numAleatorioMax = width + 10;
-                numAleatorioMin = width /2 ;
+                numAleatorioMin = width / 2;
 
                 std::uniform_int_distribution<int> dis(numAleatorioMin, numAleatorioMax);
                 pontoInicialY = dis(gen);
-
             }
         }
     }
-    
+
 }

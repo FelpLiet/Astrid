@@ -1,6 +1,5 @@
 #pragma once
 
-#include "asteroides.hpp"
 #include "nave.hpp"
 
 #include <GL/glew.h>

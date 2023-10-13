@@ -15,6 +15,7 @@ namespace spc
         float velocidade;
         float direcaoX, direcaoY;;
         int numAleatorioMax, numAleatorioMin;
+        int timeLastFrame = 0;
 
     public:
         asteroide(float xInicial, float yInicial, float xFinal, float yFinal, float vel,
@@ -45,7 +46,7 @@ namespace spc
         
         void draw_asteroide();
         void draw_lines();
-        void calculo_trajetoria(float dt, int width);
+        void calculo_trajetoria(GLFWwindow *window);
         //void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
     };
 
