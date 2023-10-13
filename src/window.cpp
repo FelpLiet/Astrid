@@ -1,14 +1,19 @@
 #include "../include/window.hpp"
 
-GLFWmonitor *monitor;
-GLFWwindow *window;
-
 spc::nave ship;
+spc::asteroide asteroide1(-50.0, 50.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0);
+
+GLFWwindow *window;
+GLFWmonitor *monitor;
+
+
 std::vector<spc::disparo> disparos;
 std::map<int, key> keyMap;
 
 bool running = true, fullscreen;
 int WIDTH = 1280, HEIGHT = 720;
+double lt = 0;
+double dt = 0.0;
 
 int initWindow()
 {
@@ -78,14 +83,19 @@ void drawScene(GLFWwindow *window)
 
     ship.draw();
 
-    for( auto disparo : disparos)
+    for (auto disparo : disparos)
     {
         if (disparo.getDrawPoint())
         {
             disparo.draw(window);
-            std::cout<<"x: "<<disparo.getX()<<" y: "<<disparo.getY()<<std::endl;
+            std::cout << "x: " << disparo.getX() << " y: " << disparo.getY() << std::endl;
         }
     }
+
+    dt = glfwGetTime() - lt / 1000.0;
+    asteroide1.calculo_trajetoria(dt, WIDTH);
+    asteroide1.draw_asteroide();
+    asteroide1.draw_lines();
 
     glfwSwapBuffers(window);
 }
@@ -106,7 +116,7 @@ void runAstrid()
         {
             input(window);
             update(window);
-            //std::cout << "FPS: " << 1.0 / deltaTime << std::endl;
+            // std::cout << "FPS: " << 1.0 / deltaTime << std::endl;
             deltaTime -= targetFrameTime;
         }
         drawScene(window);
@@ -129,14 +139,14 @@ void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
         glfwGetCursorPos(window, &xpos, &ypos);
 
         spc::disparo newDisparo(xpos, ypos, std::chrono::steady_clock::now());
-        std::cout<<"newdisparo x: "<<newDisparo.getX()<<" y: "<<newDisparo.getY()<<std::endl;
+        std::cout << "newdisparo x: " << newDisparo.getX() << " y: " << newDisparo.getY() << std::endl;
         disparos.push_back(newDisparo);
     }
 }
 
 void aspecRatio(GLFWwindow *window)
 {
-     // Set up the viewport
+    // Set up the viewport
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
     glViewport(0, 0, width, height);
