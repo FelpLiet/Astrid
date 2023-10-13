@@ -1,7 +1,7 @@
 #include "../include/window.hpp"
 
 spc::nave ship;
-spc::asteroide asteroide1(-50.0, 50.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0);
+spc::asteroide asteroide1;
 
 GLFWwindow *window;
 GLFWmonitor *monitor;
@@ -86,7 +86,7 @@ void drawScene(GLFWwindow *window)
         if (disparo.getDrawPoint())
         {
             disparo.draw(window);
-            std::cout << "x: " << disparo.getX() << " y: " << disparo.getY() << std::endl;
+            //std::cout << "x: " << disparo.getX() << " y: " << disparo.getY() << std::endl;
         }
     }
 

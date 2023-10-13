@@ -10,44 +10,42 @@ namespace spc
     class asteroide
     {
     private:
-        float pontoInicialX, pontoInicialY;
+        float x, y;
         float pontoFinalX, pontoFinalY;
+
+        float v1[3] = {-0.5f, -0.5f, 0.0f};
+        float v4[3] = {0.5f, -0.5f, 0.0f};
+        float v5[3] = {0.0f, 0.5f, 0.0f};
+        float v2[3] = {-0.5f, 0.1f, 0.0f};
+        float v3[3] = {0.5f, 0.1f, 0.0f};
+        float v6[3] = {0.0f, -0.8, 0.0f};
+
+        float color1[3] = {1.0f, 1.0f, 1.0f}; // cor branca
+        float color2[3] = {1.0f, 0.0f, 0.0f}; // cor vermelha
+
         float velocidade;
-        float direcaoX, direcaoY;;
-        int numAleatorioMax, numAleatorioMin;
-        int timeLastFrame = 0;
+        int timeLastFrame;
 
     public:
-        asteroide(float xInicial, float yInicial, float xFinal, float yFinal, float vel,
-        float dirX, float dirY, int max, int min) : pontoInicialX(xInicial),
-        pontoInicialY(yInicial), pontoFinalX(xFinal), pontoFinalY(yFinal),velocidade(vel),
-        direcaoX(dirX), direcaoY(dirY), numAleatorioMax(max), numAleatorioMin(min) {} 
+        asteroide();
         ~asteroide();
-        
-        float getPontoInicialX() { return pontoInicialX; }
-        float getPontoInicialY() { return pontoInicialY; }
+
+        float getPontoInicialX() { return x; }
+        float getPontoInicialY() { return y; }
         float getPontoFinalX() { return pontoFinalX; }
         float getPontoFinalY() { return pontoFinalY; }
-        float getVelocidade() {return velocidade; }
-        float getDirecaoX() {return direcaoX; }
-        float getDirecaoY() {return direcaoY; }
-        int getNumAleatorioMax() {return numAleatorioMax; }
-        int getNumAleatorioMin() {return numAleatorioMin; }
+        float getVelocidade() { return velocidade; }
 
-        void setPontoInicialX(float xInicial) { pontoInicialX = xInicial; }
-        void setPontoInicialY(float yInicial) { pontoInicialY = yInicial; }
+        void setPontoInicialX(float xInicial) { x = xInicial; }
+        void setPontoInicialY(float yInicial) { y = yInicial; }
         void setPontoFinalX(float xFinal) { pontoFinalX = xFinal; }
         void setPontoFinalY(float yFinal) { pontoFinalY = yFinal; }
         void setVelocidade(float vel) { velocidade = vel; }
-        void setDirecaoX(float dirX) {direcaoX = dirX; }
-        void setDirecaoY(float dirY) {direcaoY = dirY; }
-        void setNumAleatorioMax(int max) {numAleatorioMax = max; }
-        void setNumAleatorioMin(int min) {numAleatorioMin = min; }
-        
+
         void draw_asteroide();
         void draw_lines();
         void calculo_trajetoria(GLFWwindow *window);
-        //void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+        // void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
     };
 
 }
