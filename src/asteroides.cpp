@@ -70,11 +70,11 @@ namespace spc
         direcaoX /= comprimento;
         direcaoY /= comprimento;
 
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_real_distribution<float> dis(-0.1f, 0.1f);
-        pontoFinalX += dis(gen) * width/50;
-        pontoFinalY += dis(gen) * height/50;
+        // std::random_device rd;
+        // std::mt19937 gen(rd());
+        // std::uniform_real_distribution<float> dis(-0.1f, 0.1f);
+        // pontoFinalX += dis(gen) * width/50;
+        // pontoFinalY += dis(gen) * height/50;
 
         if (comprimento > 1.0f)
         {
