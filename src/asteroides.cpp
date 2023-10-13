@@ -5,7 +5,7 @@ namespace spc
     {
         x = 0.0f;
         y = 0.0f;
-        velocidade = 10.0f;
+        velocidade = 100.0f;
         timeLastFrame = 0;
         pontoFinalX = 0.0f;
         pontoFinalY = -5.0f;
@@ -55,7 +55,7 @@ namespace spc
 
     void asteroide::calculo_trajetoria(GLFWwindow *window)
     {
-        int timeNow = glfwGetTime() * 1000;
+        int timeNow = glfwGetTime() * 100;
         float delta = (float)(timeNow - timeLastFrame) / 1000.0f;
         timeLastFrame = timeNow;
 
@@ -65,23 +65,17 @@ namespace spc
         float direcaoX = pontoFinalX - x;
         float direcaoY = pontoFinalY - y;
 
-        float comprimento = sqrt((direcaoX * direcaoX) + (direcaoY * direcaoY));
+        float length = sqrt((direcaoX * direcaoX) + (direcaoY * direcaoY));
 
-        direcaoX /= comprimento;
-        direcaoY /= comprimento;
+        direcaoX /= length;
+        direcaoY /= length;
 
-        // std::random_device rd;
-        // std::mt19937 gen(rd());
-        // std::uniform_real_distribution<float> dis(-0.1f, 0.1f);
-        // pontoFinalX += dis(gen) * width/50;
-        // pontoFinalY += dis(gen) * height/50;
-
-        if (comprimento > 1.0f)
+        if (length > 1.0f)
         {
             x += direcaoX * velocidade * delta;
             y += direcaoY * velocidade * delta;
         }
-        if (comprimento < 1.0f)
+        if (length < 1.0f)
         {
             std::random_device rd;
             std::mt19937 gen(rd());

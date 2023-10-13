@@ -91,7 +91,7 @@ void drawScene(GLFWwindow *window)
     }
 
     asteroide1.draw_asteroide();
-    asteroide1.draw_lines();
+    //asteroide1.draw_lines();
 
     glfwSwapBuffers(window);
 }
