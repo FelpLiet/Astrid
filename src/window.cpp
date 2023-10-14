@@ -92,7 +92,7 @@ void drawScene(GLFWwindow *window)
     asteroide1.draw_asteroide();
     // asteroide1.draw_lines();
     space.getTerra().draw();
-
+    space.drawEstrelas();
     glfwSwapBuffers(window);
 }
 
