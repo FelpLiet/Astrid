@@ -91,7 +91,7 @@ void drawScene(GLFWwindow *window)
 
     asteroide1.draw_asteroide();
     // asteroide1.draw_lines();
-    space.draw(window);
+    space.getTerra().draw();
 
     glfwSwapBuffers(window);
 }
@@ -127,7 +127,12 @@ void update(GLFWwindow *window)
     ship.updatePosition(window);
     if (isAsteroideInsideDisparo(asteroide1, disparos))
     {
-        std::cout << "Acertou" << std::endl;
+        std::cout << "Na mosca!" << std::endl;
+        asteroide1.reset();
+    }
+    if (isAsteroideInsideTerra(asteroide1, space))
+    {
+        std::cout << "Cuidado!!" << std::endl;
         asteroide1.reset();
     }
 }
@@ -196,5 +201,16 @@ bool isAsteroideInsideDisparo(spc::asteroide &asteroide, std::vector<spc::dispar
         if (distance < disparo.getRadius())
             return true;
     }
+    return false;
+}
+
+bool isAsteroideInsideTerra(spc::asteroide &asteroide, spc::space &space)
+{
+    glm::vec2 centerXY(asteroide.getX(), asteroide.getY());
+
+    float distance = glm::length(centerXY - space.getTerra().getCenter());
+    if (distance < space.getTerra().getRadius())
+        return true;
+
     return false;
 }

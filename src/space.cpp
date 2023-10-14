@@ -30,4 +30,21 @@ namespace spc
         glPopMatrix();
     }
 
+    void terra::draw()
+    {
+        glPushMatrix();
+        glColor3f(0.0f, 0.5f, 1.0f);
+        glBegin(GL_TRIANGLE_FAN);
+        glVertex2f(center.x, center.y);
+        for (int i = 0; i <= 360; ++i)
+        {
+            float angle = glm::radians(static_cast<float>(i));
+            float x = center.x + radius * std::cos(angle);
+            float y = center.y + radius * std::sin(angle);
+            glVertex2f(x, y);
+        }
+        glEnd();
+        glPopMatrix();
+    }
+
 }
