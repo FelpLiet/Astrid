@@ -86,7 +86,6 @@ void drawScene(GLFWwindow *window)
         if (disparo.getDrawPoint())
         {
             disparo.draw(window);
-            // std::cout << "x: " << disparo.getX() << " y: " << disparo.getY() << std::endl;
         }
     }
 
@@ -101,7 +100,6 @@ void runAstrid()
 {
     initWindow();
     double lastTime = 0;
-    double deltaTime = 0.0;
     const double FPS = 60.0;
     const double targetFrameTime = 1.0 / FPS;
     while (running)
@@ -127,6 +125,11 @@ void update(GLFWwindow *window)
     asteroide1.calculo_trajetoria(window);
     spc::verificaDisparos(disparos);
     ship.updatePosition(window);
+    if (isAsteroideInsideDisparo(asteroide1, disparos))
+    {
+        std::cout << "Acertou" << std::endl;
+        asteroide1.reset();
+    }
 }
 
 void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
@@ -139,16 +142,22 @@ void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
         GLdouble modelview[16], projection[16];
         GLint viewport[4];
 
+        // This code retrieves the current modelview, projection, and viewport matrices
+        // from OpenGL and stores them in the modelview, projection, and viewport arrays.
         glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
         glGetDoublev(GL_PROJECTION_MATRIX, projection);
         glGetIntegerv(GL_VIEWPORT, viewport);
 
+        // This code uses gluUnProject to convert the mouse click coordinates from
+        // screen space to world space. The xpos and ypos parameters are the screen
+        // coordinates of the mouse click, while the modelview, projection, and viewport
+        // parameters are the matrices retrieved in the previous lines. The resulting
+        // world coordinates are stored in the worldX, worldY, and worldZ variables
         GLdouble worldX, worldY, worldZ;
         gluUnProject(xpos, viewport[3] - ypos, 0.0, modelview, projection, viewport, &worldX, &worldY, &worldZ);
-
-        spc::disparo newDisparo(worldX, worldY, std::chrono::steady_clock::now());
+        glm::vec2 centerXY(worldX, worldY);
+        spc::disparo newDisparo(centerXY, std::chrono::steady_clock::now());
         std::cout << "x: " << worldX << " y: " << worldY << std::endl;
-       // std::cout << "newdisparo x: " << newDisparo.getX() << " y: " << newDisparo.getY() << std::endl;
         disparos.push_back(newDisparo);
     }
 }
@@ -176,4 +185,16 @@ void aspecRatio(GLFWwindow *window)
 
     // Switch back to the modelview matrix
     glMatrixMode(GL_MODELVIEW);
+}
+
+bool isAsteroideInsideDisparo(spc::asteroide &asteroide, std::vector<spc::disparo> &disparos)
+{
+    glm::vec2 centerXY(asteroide.getX(), asteroide.getY());
+    for (auto disparo : disparos)
+    {
+        float distance = glm::length(centerXY - disparo.getCenter());
+        if (distance < disparo.getRadius())
+            return true;
+    }
+    return false;
 }

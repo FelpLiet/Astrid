@@ -6,7 +6,6 @@ namespace spc
         x = 0.0f;
         y = 0.0f;
         velocidade = 10.0f;
-        timeLastFrame = 0;
         pontoFinalX = 0.0f;
         pontoFinalY = -5.0f;
     }
@@ -97,6 +96,23 @@ namespace spc
                 y = dis(gen);
             }
         }
+    }
+
+    void asteroide::reset()
+    {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+
+        int numAleatorioMax = 17;
+        int numAleatorioMin = -17;
+
+        std::uniform_int_distribution<int> dis(numAleatorioMin, numAleatorioMax);
+        x = dis(gen);
+        y = 10;
+
+        numAleatorioMax = 0;
+        numAleatorioMin = -10;
+
     }
 
 }

@@ -44,11 +44,11 @@ namespace spc
 
         glEnable(GL_TEXTURE_2D);
         glBegin(GL_TRIANGLES);
-        glTexCoord2f(0.0f, 0.0f);
+        glTexCoord2f(-0.5f, -0.5f);
         glVertex3f(vertices[0], vertices[1], vertices[2]);
-        glTexCoord2f(1.0f, 0.0f);
+        glTexCoord2f(0.0f, -0.5f);
         glVertex3f(vertices[3], vertices[4], vertices[5]);
-        glTexCoord2f(0.5f, 1.0f);
+        glTexCoord2f(0.0f, 0.5f);
         glVertex3f(vertices[6], vertices[7], vertices[8]);
         glEnd();
         glDisable(GL_TEXTURE_2D);

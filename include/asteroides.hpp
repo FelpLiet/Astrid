@@ -24,14 +24,13 @@ namespace spc
         float color2[3] = {1.0f, 0.0f, 0.0f}; // cor vermelha
 
         float velocidade;
-        int timeLastFrame;
 
     public:
         asteroide();
         ~asteroide();
 
-        float getPontoInicialX() { return x; }
-        float getPontoInicialY() { return y; }
+        float getX() { return x; }
+        float getY() { return y; }
         float getPontoFinalX() { return pontoFinalX; }
         float getPontoFinalY() { return pontoFinalY; }
         float getVelocidade() { return velocidade; }
@@ -45,6 +44,7 @@ namespace spc
         void draw_asteroide();
         void draw_lines();
         void calculo_trajetoria(GLFWwindow *window);
+        void reset();
         // void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
     };
 
