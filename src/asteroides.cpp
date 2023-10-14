@@ -5,7 +5,7 @@ namespace spc
     {
         x = 0.0f;
         y = 0.0f;
-        velocidade = 100.0f;
+        velocidade = 10.0f;
         timeLastFrame = 0;
         pontoFinalX = 0.0f;
         pontoFinalY = -5.0f;
@@ -55,9 +55,10 @@ namespace spc
 
     void asteroide::calculo_trajetoria(GLFWwindow *window)
     {
-        int timeNow = glfwGetTime() * 100;
-        float delta = (float)(timeNow - timeLastFrame) / 1000.0f;
-        timeLastFrame = timeNow;
+        static double lastFrameTime = 0.0;
+        double timeNow = glfwGetTime();
+        float delta = (float)(timeNow - lastFrameTime);
+        lastFrameTime = timeNow;
 
         int width, height;
         glfwGetWindowSize(window, &width, &height);
@@ -83,17 +84,15 @@ namespace spc
             int numAleatorioMax = width / 55;
             int numAleatorioMin = -width / 55;
 
-
             std::uniform_int_distribution<int> dis(numAleatorioMin, numAleatorioMax);
             x = dis(gen);
             y = height / 50;
 
-            if (x < -15 || x > 15)
+            if (x < -17 || x > 17)
             {
                 numAleatorioMax = height / 50 / 2;
                 numAleatorioMin = 0;
 
-                std::cout << "numAleatorioMax: " << numAleatorioMax << " numAleatorioMin: " << numAleatorioMin << std::endl;
                 std::uniform_int_distribution<int> dis(numAleatorioMin, numAleatorioMax);
                 y = dis(gen);
             }
