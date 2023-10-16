@@ -79,16 +79,16 @@ void drawScene(GLFWwindow *window)
 
     glClear(GL_COLOR_BUFFER_BIT);
 
-    space.drawEstrelas();
-    
     ship.draw();
+
+    space.drawEstrelas();
     
     space.getTerra().draw();
 
     spc::drawDisparos(disparos, window);
 
     asteroide1.draw_asteroide();
-    // asteroide1.draw_lines();
+    // asteroide1.draw_lines(); // desenha as linhas de trajetoria do asteroide
     
     glfwSwapBuffers(window);
 }
