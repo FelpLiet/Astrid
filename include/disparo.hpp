@@ -40,4 +40,5 @@ namespace spc
     };
 
     void verificaDisparos(std::vector<disparo> &disparos);
+    void  drawDisparos(std::vector<disparo> &disparos, GLFWwindow *window);
 }

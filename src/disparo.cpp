@@ -46,4 +46,12 @@ namespace spc
         }
     }
 
+    void  drawDisparos(std::vector<disparo> &disparos, GLFWwindow *window)
+    {
+        for (auto disparo : disparos)
+        {
+            disparo.draw(window);
+        }
+    }
+
 }
