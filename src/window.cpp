@@ -1,10 +1,16 @@
 #include "../include/window.hpp"
 
-bool running = true, fullscreen;
 spc::nave ship;
+spc::space space;
+spc::asteroide asteroide1;
+
 GLFWwindow *window;
 GLFWmonitor *monitor;
+
+std::vector<spc::disparo> disparos;
 std::map<int, key> keyMap;
+
+bool running = true, fullscreen;
 int WIDTH = 1280, HEIGHT = 720;
 
 int initWindow()
@@ -29,10 +35,13 @@ int initWindow()
     }
 
     glfwMakeContextCurrent(window);
+
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
+
     monitor = glfwGetPrimaryMonitor();
     running = true;
     fullscreen = false;
-    //glfwSetWindowSizeCallback(window, reshapeWindow);
+
     // Inicializa GLEW
     if (glewInit() != GLEW_OK)
     {
@@ -66,6 +75,97 @@ void input(GLFWwindow *window)
 
 void drawScene(GLFWwindow *window)
 {
+    aspecRatio(window);
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    ship.draw();
+
+    space.drawEstrelas();
+    
+    space.getTerra().draw();
+
+    spc::drawDisparos(disparos, window);
+
+    asteroide1.draw_asteroide();
+    // asteroide1.draw_lines(); // desenha as linhas de trajetoria do asteroide
+    
+    glfwSwapBuffers(window);
+}
+
+void runAstrid()
+{
+    initWindow();
+    double lastTime = 0;
+    const double FPS = 60.0;
+    const double targetFrameTime = 1.0 / FPS;
+    while (running)
+    {
+        double currentTime = glfwGetTime();
+        double deltaTime = currentTime - lastTime;
+        lastTime = currentTime;
+        while (deltaTime >= targetFrameTime)
+        {
+            input(window);
+            update(window);
+            // std::cout << "FPS: " << 1.0 / deltaTime << std::endl;
+            deltaTime -= targetFrameTime;
+        }
+        drawScene(window);
+    }
+    glfwDestroyWindow(window);
+    glfwTerminate();
+}
+
+void update(GLFWwindow *window)
+{
+    asteroide1.calculo_trajetoria(window);
+    spc::verificaDisparos(disparos);
+    ship.updatePosition(window);
+    if (isAsteroideInsideDisparo(asteroide1, disparos))
+    {
+        std::cout << "Na mosca!" << std::endl;
+        asteroide1.reset();
+    }
+    if (isAsteroideInsideTerra(asteroide1, space))
+    {
+        std::cout << "Cuidado!!" << std::endl;
+        asteroide1.reset();
+    }
+}
+
+void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
+{
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+    {
+        double xpos, ypos;
+        glfwGetCursorPos(window, &xpos, &ypos);
+
+        GLdouble modelview[16], projection[16];
+        GLint viewport[4];
+
+        // This code retrieves the current modelview, projection, and viewport matrices
+        // from OpenGL and stores them in the modelview, projection, and viewport arrays.
+        glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
+        glGetDoublev(GL_PROJECTION_MATRIX, projection);
+        glGetIntegerv(GL_VIEWPORT, viewport);
+
+        // This code uses gluUnProject to convert the mouse click coordinates from
+        // screen space to world space. The xpos and ypos parameters are the screen
+        // coordinates of the mouse click, while the modelview, projection, and viewport
+        // parameters are the matrices retrieved in the previous lines. The resulting
+        // world coordinates are stored in the worldX, worldY, and worldZ variables
+        GLdouble worldX, worldY, worldZ;
+        gluUnProject(xpos, viewport[3] - ypos, 0.0, modelview, projection, viewport, &worldX, &worldY, &worldZ);
+        glm::vec2 centerXY(worldX, worldY);
+        spc::disparo newDisparo(centerXY, std::chrono::steady_clock::now());
+        std::cout << "x: " << worldX << " y: " << worldY << std::endl;
+        disparos.push_back(newDisparo);
+    }
+}
+
+void aspecRatio(GLFWwindow *window)
+{
     // Set up the viewport
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
@@ -87,40 +187,27 @@ void drawScene(GLFWwindow *window)
 
     // Switch back to the modelview matrix
     glMatrixMode(GL_MODELVIEW);
-
-
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    ship.updatePosition(window);
-    ship.draw();
-    glfwSwapBuffers(window);
 }
 
-void runAstrid()
+bool isAsteroideInsideDisparo(spc::asteroide &asteroide, std::vector<spc::disparo> &disparos)
 {
-    initWindow();
-    double lastTime = 0;
-    double deltaTime = 0.0;
-    const double FPS = 60.0;
-    const double targetFrameTime = 1.0 / FPS;
-    while (running)
+    glm::vec2 centerXY(asteroide.getX(), asteroide.getY());
+    for (auto disparo : disparos)
     {
-        double currentTime = glfwGetTime();
-        double deltaTime = currentTime - lastTime;
-        lastTime = currentTime;
-        while (deltaTime >= targetFrameTime)
-        {
-            input(window);
-            update(window);
-            std::cout << "FPS: " << 1.0 / deltaTime << std::endl;
-            deltaTime -= targetFrameTime;
-        }
-        drawScene(window);
+        float distance = glm::length(centerXY - disparo.getCenter());
+        if (distance < disparo.getRadius())
+            return true;
     }
-    glfwDestroyWindow(window);
-    glfwTerminate();
+    return false;
 }
 
-void update(GLFWwindow *window)
+bool isAsteroideInsideTerra(spc::asteroide &asteroide, spc::space &space)
 {
+    glm::vec2 centerXY(asteroide.getX(), asteroide.getY());
+
+    float distance = glm::length(centerXY - space.getTerra().getCenter());
+    if (distance < space.getTerra().getRadius())
+        return true;
+
+    return false;
 }

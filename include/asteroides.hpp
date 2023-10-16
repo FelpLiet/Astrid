@@ -1,6 +1,9 @@
 #pragma once
 
 #include "space.hpp"
+#include <time.h>
+#include <random>
+#include <math.h>
 
 namespace spc
 {
@@ -8,22 +11,41 @@ namespace spc
     {
     private:
         float x, y;
-        float radius;
+        float pontoFinalX, pontoFinalY;
+
+        float v1[3] = {-0.5f, -0.5f, 0.0f};
+        float v4[3] = {0.5f, -0.5f, 0.0f};
+        float v5[3] = {0.0f, 0.5f, 0.0f};
+        float v2[3] = {-0.5f, 0.1f, 0.0f};
+        float v3[3] = {0.5f, 0.1f, 0.0f};
+        float v6[3] = {0.0f, -0.8, 0.0f};
+
+        float color1[3] = {1.0f, 1.0f, 1.0f}; // cor branca
+        float color2[3] = {1.0f, 0.0f, 0.0f}; // cor vermelha
+
+        float velocidade;
 
     public:
-        asteroide(float x, float y, float radius) : x(x), y(y), radius(radius) {}
+        asteroide();
         ~asteroide();
-        
-        float get_radius() { return radius; }
-        float get_x() { return x; }
-        float get_y() { return y; }
 
-        void set_x(float x) { this->x = x; }
-        void set_y(float y) { this->y = y; }
-        void set_radius(float radius) { this->radius = radius; }
-        
+        float getX() { return x; }
+        float getY() { return y; }
+        float getPontoFinalX() { return pontoFinalX; }
+        float getPontoFinalY() { return pontoFinalY; }
+        float getVelocidade() { return velocidade; }
+
+        void setPontoInicialX(float xInicial) { x = xInicial; }
+        void setPontoInicialY(float yInicial) { y = yInicial; }
+        void setPontoFinalX(float xFinal) { pontoFinalX = xFinal; }
+        void setPontoFinalY(float yFinal) { pontoFinalY = yFinal; }
+        void setVelocidade(float vel) { velocidade = vel; }
+
         void draw_asteroide();
-        //void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+        void draw_lines();
+        void calculo_trajetoria(GLFWwindow *window);
+        void reset();
+        // void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
     };
-    
+
 }

@@ -10,9 +10,11 @@ namespace spc
         vertices[0] = -0.5f;
         vertices[1] = -0.5f;
         vertices[2] = 0.0f;
+
         vertices[3] = 0.5f;
         vertices[4] = -0.5f;
         vertices[5] = 0.0f;
+        
         vertices[6] = 0.0f;
         vertices[7] = 0.5f;
         vertices[8] = 0.0f;
@@ -32,22 +34,25 @@ namespace spc
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
         stbi_image_free(image);
 
+        glPushMatrix();
         glClear(GL_COLOR_BUFFER_BIT);
+        glColor3f(1.0f, 1.0f, 1.0f);
         glLoadIdentity();
-        //glTranslatef(getX(), getY(), 0.0f);
-        //glScalef(0.1f, 0.1f, 0.1f);
+        // glTranslatef(getX(), getY(), 0.0f);
+        // glScalef(0.1f, 0.1f, 0.1f);
         glRotatef(getRotationAngle(), 0.0f, 0.0f, 1.0f);
 
         glEnable(GL_TEXTURE_2D);
         glBegin(GL_TRIANGLES);
-        glTexCoord2f(0.0f, 0.0f);
+        glTexCoord2f(-0.5f, -0.5f);
         glVertex3f(vertices[0], vertices[1], vertices[2]);
-        glTexCoord2f(1.0f, 0.0f);
+        glTexCoord2f(0.0f, -0.5f);
         glVertex3f(vertices[3], vertices[4], vertices[5]);
-        glTexCoord2f(0.5f, 1.0f);
+        glTexCoord2f(0.0f, 0.5f);
         glVertex3f(vertices[6], vertices[7], vertices[8]);
         glEnd();
         glDisable(GL_TEXTURE_2D);
+        glPopMatrix();
     }
 
     void nave::updatePosition(GLFWwindow *window)

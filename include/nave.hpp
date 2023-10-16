@@ -6,13 +6,14 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <chrono>
 
 namespace spc
 {
     class nave
     {
     private:
-        float vertices[9];  
+        float vertices[9];
         float rotationAngle;
         float rotationSpeed;
         float x, y;
@@ -35,6 +36,6 @@ namespace spc
 
         void draw();
         void updatePosition(GLFWwindow *window);
-   
-};
+        
+    };
 }
